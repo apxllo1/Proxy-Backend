@@ -129,3 +129,22 @@ http.createServer(function(req, res) {
 }).listen(port, host, function() {
     console.log('Proxy environment online.');
 });
+
+
+// Add this helper function to parse and isolate upstream redirects
+function proxyResponseHeaders(req, res, proxyRes) {
+    // Intercept upstream location changes (HTTP 301/302 redirects)
+    if (proxyRes.headers.location) {
+        let originalRedirect = proxyRes.headers.location;
+        
+        // If the redirect is relative, convert it into an absolute URL
+        if (originalRedirect.startsWith('/')) {
+            const targetUrlParam = new URL(req.url, 'http://localhost').pathname.substring(1);
+            const targetOrigin = new URL(targetUrlParam).origin;
+            originalRedirect = targetOrigin + originalRedirect;
+        }
+        
+        // Force the browser redirect to loop back through your proxy wrapper path
+        proxyRes.headers.location = '/view?url=' + encodeURIComponent(originalRedirect);
+    }
+}
