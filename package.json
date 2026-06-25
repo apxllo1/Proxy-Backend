@@ -1,10 +1,13 @@
 {
-  "name": "render-proxy",
-  "version": "1.0.0",
+  "name": "enterprise-unblocker-gateway",
+  "version": "2.0.0",
+  "description": "High-performance emulated browser socket proxy environment",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "cors-anywhere": "^0.4.4"
+    "ws": "^8.16.0",
+    "http-proxy": "^1.18.1"
   }
 }
